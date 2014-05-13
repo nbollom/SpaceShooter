@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceShooter", "SpaceShooter.vcxproj", "{380F5299-AC65-444A-8285-00885B1E6936}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{380F5299-AC65-444A-8285-00885B1E6936}.Debug|Win32.ActiveCfg = Debug|Win32
+		{380F5299-AC65-444A-8285-00885B1E6936}.Debug|Win32.Build.0 = Debug|Win32
+		{380F5299-AC65-444A-8285-00885B1E6936}.Release|Win32.ActiveCfg = Release|Win32
+		{380F5299-AC65-444A-8285-00885B1E6936}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

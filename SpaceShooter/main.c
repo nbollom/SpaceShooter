@@ -24,10 +24,16 @@ int main(int argc, char **argv) {
     ALLEGRO_TIMER *timer = NULL;
     ALLEGRO_FONT *fpsfont;
     ALLEGRO_MONITOR_INFO monitor;
-    
+	struct Size designSize = DESIGNSIZE;
+	struct Size winSize;
     bool run = true;
     int fps = 0, fps_accum = 0;
     double fps_time = 0.0;
+	float sx;
+	float sy;
+	ALLEGRO_TRANSFORM trans;
+	ALLEGRO_COLOR color_black = al_map_rgb_f(0, 0, 0);
+    ALLEGRO_COLOR color_white = al_map_rgb_f(1, 1, 1);
     
     if (!al_init()) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize allegro", "OK", ALLEGRO_MESSAGEBOX_ERROR);
@@ -44,10 +50,14 @@ int main(int argc, char **argv) {
         return -1;
     }
     
+#ifndef _WIN32
     if (!al_init_font_addon()) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize font addon", "OK", ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
     }
+#else
+	al_init_font_addon();
+#endif
     
     if (!al_init_ttf_addon()) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize ttf font addon", "OK", ALLEGRO_MESSAGEBOX_ERROR);
@@ -71,10 +81,9 @@ int main(int argc, char **argv) {
         return -1;
     }
     
-    struct Size designSize = DESIGNSIZE;
-    
     al_get_monitor_info(0, &monitor);
-    struct Size winSize = {(float)(monitor.x2 - monitor.x1), (float)(monitor.y2 - monitor.x1)};
+	winSize.w = (float)(monitor.x2 - monitor.x1);
+	winSize.h = (float)(monitor.y2 - monitor.x1);
     
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
@@ -87,9 +96,8 @@ int main(int argc, char **argv) {
     if (!USEMOUSE) {
         al_hide_mouse_cursor(display);
     }
-    float sx = winSize.w / designSize.w;
-    float sy = winSize.h / designSize.h;
-    ALLEGRO_TRANSFORM trans;
+    sx = winSize.w / designSize.w;
+    sy = winSize.h / designSize.h;
     al_identity_transform(&trans);
     al_scale_transform(&trans, sx, sy);
     al_use_transform(&trans);
@@ -110,9 +118,6 @@ int main(int argc, char **argv) {
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue, al_get_keyboard_event_source());
     
-    ALLEGRO_COLOR color_black = al_map_rgb_f(0, 0, 0);
-    ALLEGRO_COLOR color_white = al_map_rgb_f(1, 1, 1);
-    
     al_clear_to_color(color_black);
     al_flip_display();
     
@@ -128,6 +133,7 @@ int main(int argc, char **argv) {
     
     while (run)
     {
+		double t;
         ALLEGRO_EVENT ev;
         al_wait_for_event(event_queue, &ev);
         
@@ -160,7 +166,7 @@ int main(int argc, char **argv) {
                 al_flip_display();
                 
                 fps_accum++;
-                double t = al_get_time();
+                t = al_get_time();
                 if (t - fps_time >= 1) {
                     fps = fps_accum;
                     fps_accum = 0;

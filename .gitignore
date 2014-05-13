@@ -1,3 +1,10 @@
 
 xcuserdata
 *.xcworkspace
+Release/*
+*.opensdf
+*.sdf
+*.suo
+*.user
+*.filters
+ipch/*

@@ -2,6 +2,14 @@
 #include <math.h>
 #include "gameobjects.h"
 
+#ifdef _WIN32
+
+static double round(double val) {
+	return floor(val + 0.5);
+}
+
+#endif
+
 #define MAX(a,b) (a > b ? a : b)
 #define MIN(a,b) (a > b ? b : a)
 #define FORCE 0.5
@@ -43,10 +51,11 @@ bool loadImages(void) {
 }
 
 void unloadImages(void) {
+	int i;
     if (starImage) {
         al_destroy_bitmap(starImage);
     }
-    for (int i = 0; i < 2; i++) {
+    for (i = 0; i < 2; i++) {
         if (shipImages[i]) {
             al_destroy_bitmap(shipImages[i]);
         }
@@ -60,30 +69,37 @@ static void fixPoint(void) {
 }
 
 void buildMap(struct Size winSize) {
+	int maxStars = MAX_STARS;
+	int i;
     ws = winSize;
-    int maxStars = MAX_STARS;
-    for (int i = 0; i < maxStars; i++) {
+    for (i = 0; i < maxStars; i++) {
         float s = r(0.4) + 0.1;
-        float w = 20 * s;
-        float h = 20 * s;
-        float x = r(MAP_MAX - w);
-        float y = r(MAP_MAX - h);
-        ALLEGRO_COLOR color = colors[(int)round(r(4))];
-        stars[i] = (struct Sprite){{x,y},{w,h},color,starImage};
+		stars[i].s.w = 20 * s;
+        stars[i].s.h = 20 * s;
+        stars[i].p.x = r(MAP_MAX - stars[i].s.w);
+        stars[i].p.y = r(MAP_MAX - stars[i].s.h);
+        stars[i].t = colors[(int)round(r(4))];
+        stars[i].i = starImage;
     }
     { //player scope
         float w = 110;
         float h = 246;
-        float x = r(MAP_MAX - (w * 2)) + w;
-        float y = r(MAP_MAX - (h * 2)) + h;
-        float ro = r(6.2);
-        player = (struct SpaceShip){{x,y},{55,90},{0,0},ro,0,{1,1,1,1},{shipImages[0],shipImages[1]}};
-        pos = (struct Point){x,y};
+        player.p.x = r(MAP_MAX - (w * 2)) + w;
+        player.p.y = r(MAP_MAX - (h * 2)) + h;
+        player.r = r(6.2);
+		player.c.x = 55;
+		player.c.y = 90;
+		player.t = al_map_rgba_f(1,1,1,1);
+		player.i[0] = shipImages[0];
+		player.i[1] = shipImages[1];
+		pos.x = player.p.x;
+		pos.y = player.p.y;
         fixPoint();
     }
 }
 
 void moveObjects(void) {
+	ALLEGRO_KEYBOARD_STATE keyState;
     player.a.x -= player.a.x * DECAY;
     player.a.y -= player.a.y * DECAY;
     if (player.a.x < 0.01 && player.a.x > -0.01) {
@@ -92,7 +108,6 @@ void moveObjects(void) {
     if (player.a.y < 0.01 && player.a.y > -0.01) {
         player.a.y = 0;
     }
-    ALLEGRO_KEYBOARD_STATE keyState;
     al_get_keyboard_state(&keyState);
     if (al_key_down(&keyState, ALLEGRO_KEY_UP)) {
 //        player.a.x += sin(player.r) * FORCE;
@@ -142,8 +157,9 @@ void renderObjects(void) {
     struct Point offset = {(pos.x - (ws.w / 2)), (pos.y - (ws.h / 2))};
     struct Point beg = {(pos.x - (ws.w / 2)) - 200, (pos.y - (ws.h / 2)) - 200};
     struct Point end = {(pos.x + (ws.w / 2)) + 200, (pos.y + (ws.h / 2)) + 200};
+	int i;
     int maxStars = MAX_STARS;
-    for (int i = 0; i < maxStars; i++) {
+    for (i = 0; i < maxStars; i++) {
         struct Sprite s = stars[i];
         if (s.p.x > beg.x && s.p.x < end.x && s.p.y > beg.y && s.p.y < end.y) {
             al_draw_tinted_scaled_bitmap(s.i, s.t, 0, 0, 20, 20, s.p.x - offset.x, s.p.y - offset.y, s.s.w, s.s.h, 0);
