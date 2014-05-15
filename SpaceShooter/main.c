@@ -15,7 +15,7 @@
 const float FPS = 60;
 
 float getAspectRatio(struct Size size) {
-    return size.w / size.w;
+    return size.width / size.height;
 }
 
 int main(int argc, char **argv) {
@@ -82,12 +82,12 @@ int main(int argc, char **argv) {
     }
     
     al_get_monitor_info(0, &monitor);
-	winSize.w = (float)(monitor.x2 - monitor.x1);
-	winSize.h = (float)(monitor.y2 - monitor.x1);
+	winSize.width = (float)(monitor.x2 - monitor.x1);
+	winSize.height = (float)(monitor.y2 - monitor.x1);
     
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
-    display = al_create_display(designSize.w, designSize.h);
+    display = al_create_display(designSize.width, designSize.height);
     if (!display) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to create display", "OK", ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
@@ -96,8 +96,8 @@ int main(int argc, char **argv) {
     if (!USEMOUSE) {
         al_hide_mouse_cursor(display);
     }
-    sx = winSize.w / designSize.w;
-    sy = winSize.h / designSize.h;
+    sx = winSize.width / designSize.width;
+    sy = winSize.height / designSize.height;
     al_identity_transform(&trans);
     al_scale_transform(&trans, sx, sy);
     al_use_transform(&trans);
@@ -155,12 +155,12 @@ int main(int argc, char **argv) {
                 renderObjects();
                 
                 if (SHOWSTATS) {
-                    al_draw_textf(fpsfont, color_white, designSize.w, 0, ALLEGRO_ALIGN_RIGHT, "FPS: %02d", fps);
-                    al_draw_textf(fpsfont, color_white, designSize.w, 20, ALLEGRO_ALIGN_RIGHT, "R: %0.2f", player.r);
-                    al_draw_textf(fpsfont, color_white, designSize.w, 40, ALLEGRO_ALIGN_RIGHT, "AX: %06.2f", player.a.x);
-                    al_draw_textf(fpsfont, color_white, designSize.w, 60, ALLEGRO_ALIGN_RIGHT, "AY: %06.2f", player.a.y);
-                    al_draw_textf(fpsfont, color_white, designSize.w, 80, ALLEGRO_ALIGN_RIGHT, "X: %04.0f/%04d", player.p.x, MAP_MAX);
-                    al_draw_textf(fpsfont, color_white, designSize.w, 100, ALLEGRO_ALIGN_RIGHT, "Y: %04.0f/%04d", player.p.y, MAP_MAX);
+                    al_draw_textf(fpsfont, color_white, designSize.width, 0, ALLEGRO_ALIGN_RIGHT, "FPS: %02d", fps);
+                    al_draw_textf(fpsfont, color_white, designSize.width, 20, ALLEGRO_ALIGN_RIGHT, "R: %0.2f", player.rotation);
+                    al_draw_textf(fpsfont, color_white, designSize.width, 40, ALLEGRO_ALIGN_RIGHT, "AX: %06.2f", player.accel.x);
+                    al_draw_textf(fpsfont, color_white, designSize.width, 60, ALLEGRO_ALIGN_RIGHT, "AY: %06.2f", player.accel.y);
+                    al_draw_textf(fpsfont, color_white, designSize.width, 80, ALLEGRO_ALIGN_RIGHT, "X: %04.0f/%04d", player.pos.x, MAP_MAX);
+                    al_draw_textf(fpsfont, color_white, designSize.width, 100, ALLEGRO_ALIGN_RIGHT, "Y: %04.0f/%04d", player.pos.y, MAP_MAX);
                 }
                 al_wait_for_vsync();
                 al_flip_display();

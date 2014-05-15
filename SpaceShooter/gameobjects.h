@@ -14,25 +14,28 @@ struct Point {
 };
 
 struct Size {
-    float w;
-    float h;
+    float width;
+    float height;
 };
 
 struct Sprite {
-    struct Point p;
-    struct Size s;
-    ALLEGRO_COLOR t;
-    ALLEGRO_BITMAP *i;
+    struct Point pos;
+    struct Size size;
+    ALLEGRO_COLOR tint;
+    ALLEGRO_BITMAP *image;
 };
 
 struct SpaceShip {
-    struct Point p;
-    struct Point c;
-    struct Point a;
-    float r;
-    bool ii;
-    ALLEGRO_COLOR t;
-    ALLEGRO_BITMAP *i[2];
+    struct Point pos;
+    struct Point centre;
+    struct Point accel;
+    float rotation;
+    bool imageIndex;
+    ALLEGRO_COLOR tint;
+    ALLEGRO_BITMAP *image[2];
+    float shield;
+    float shieldRecharge;
+    float shotCooldown;
 };
 
 extern struct SpaceShip player;
