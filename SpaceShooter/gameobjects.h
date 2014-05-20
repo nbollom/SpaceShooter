@@ -5,8 +5,6 @@
 #define SpaceShooter_gameobjects_h
 
 #define MAP_MAX 9999
-#define MAX_STARS (int)((float)MAP_MAX / 1.5)
-#define MAX_PLANETS (MAP_MAX / 4) / 8
 
 struct Point {
     float x;
@@ -18,11 +16,20 @@ struct Size {
     float height;
 };
 
-struct Sprite {
+struct Star {
     struct Point pos;
     struct Size size;
     ALLEGRO_COLOR tint;
     ALLEGRO_BITMAP *image;
+};
+
+struct Turret {
+    struct Point pos;
+    struct Size size;
+    float rotation;
+    float rotationIncrement;
+    ALLEGRO_BITMAP *image;
+    float shotCooldown;
 };
 
 struct SpaceShip {
@@ -31,11 +38,19 @@ struct SpaceShip {
     struct Point accel;
     float rotation;
     bool imageIndex;
-    ALLEGRO_COLOR tint;
     ALLEGRO_BITMAP *image[2];
     float shield;
     float shieldRecharge;
     float shotCooldown;
+};
+
+struct Lazer {
+    struct Point start;
+    struct Point pos;
+    struct Point accel;
+    float distance;
+    float rotation;
+    bool players;
 };
 
 extern struct SpaceShip player;

@@ -161,6 +161,8 @@ int main(int argc, char **argv) {
                     al_draw_textf(fpsfont, color_white, designSize.width, 60, ALLEGRO_ALIGN_RIGHT, "AY: %06.2f", player.accel.y);
                     al_draw_textf(fpsfont, color_white, designSize.width, 80, ALLEGRO_ALIGN_RIGHT, "X: %04.0f/%04d", player.pos.x, MAP_MAX);
                     al_draw_textf(fpsfont, color_white, designSize.width, 100, ALLEGRO_ALIGN_RIGHT, "Y: %04.0f/%04d", player.pos.y, MAP_MAX);
+                    al_draw_textf(fpsfont, color_white, designSize.width, 120, ALLEGRO_ALIGN_RIGHT, "Shield: %0.4f", player.shield);
+                    al_draw_textf(fpsfont, color_white, designSize.width, 140, ALLEGRO_ALIGN_RIGHT, "Shot: %0.4f", player.shotCooldown);
                 }
                 al_wait_for_vsync();
                 al_flip_display();
