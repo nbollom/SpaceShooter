@@ -36,6 +36,15 @@
 		3F113040192B46DF00B76B68 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE61D28191A1D53001DED8B /* AppKit.framework */; };
 		3F113041192B46EA00B76B68 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE61D25191A1D53001DED8B /* Cocoa.framework */; };
 		3F113042192B46F700B76B68 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE61D2A191A1D53001DED8B /* Foundation.framework */; };
+		3FA1689719347F1D0024A252 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1689319347F1D0024A252 /* libogg.a */; };
+		3FA1689819347F1D0024A252 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1689419347F1D0024A252 /* libvorbis.a */; };
+		3FA1689919347F1D0024A252 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1689519347F1D0024A252 /* libvorbisenc.a */; };
+		3FA1689A19347F1D0024A252 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1689619347F1D0024A252 /* libvorbisfile.a */; };
+		3FA1689C19347F550024A252 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1689B19347F550024A252 /* AudioToolbox.framework */; };
+		3FA1689E19347F6E0024A252 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1689D19347F6E0024A252 /* OpenAL.framework */; };
+		3FA168A119347FDD0024A252 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3FA1689F19347FDD0024A252 /* explosion.wav */; };
+		3FA168A219347FDD0024A252 /* laser.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3FA168A019347FDD0024A252 /* laser.wav */; };
+		3FA168A61934A6310024A252 /* Afterburner.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 3FA168A51934A6300024A252 /* Afterburner.ogg */; };
 		3FE61D3E191A1D53001DED8B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FE61D3D191A1D53001DED8B /* Images.xcassets */; };
 		3FE61D81191A1F79001DED8B /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 3FE61D7F191A1F79001DED8B /* main.c */; };
 /* End PBXBuildFile section */
@@ -66,6 +75,15 @@
 		3F01C7AF192B41BA00F043A3 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		3F01C7B1192B41E600F043A3 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../allegro/build/deps/lib/libfreetype.a; sourceTree = "<group>"; };
 		3F01C7B3192B421900F043A3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		3FA1689319347F1D0024A252 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libogg.a; sourceTree = "<group>"; };
+		3FA1689419347F1D0024A252 /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbis.a; sourceTree = "<group>"; };
+		3FA1689519347F1D0024A252 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbisenc.a; sourceTree = "<group>"; };
+		3FA1689619347F1D0024A252 /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbisfile.a; sourceTree = "<group>"; };
+		3FA1689B19347F550024A252 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		3FA1689D19347F6E0024A252 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		3FA1689F19347FDD0024A252 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = explosion.wav; path = Images/explosion.wav; sourceTree = SOURCE_ROOT; };
+		3FA168A019347FDD0024A252 /* laser.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = laser.wav; path = Images/laser.wav; sourceTree = SOURCE_ROOT; };
+		3FA168A51934A6300024A252 /* Afterburner.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = Afterburner.ogg; sourceTree = "<group>"; };
 		3FE61D22191A1D53001DED8B /* SpaceShooter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceShooter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE61D25191A1D53001DED8B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		3FE61D28191A1D53001DED8B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -82,15 +100,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FA1689E19347F6E0024A252 /* OpenAL.framework in Frameworks */,
+				3FA1689C19347F550024A252 /* AudioToolbox.framework in Frameworks */,
 				3F113042192B46F700B76B68 /* Foundation.framework in Frameworks */,
+				3FA1689A19347F1D0024A252 /* libvorbisfile.a in Frameworks */,
 				3F113041192B46EA00B76B68 /* Cocoa.framework in Frameworks */,
 				3F113040192B46DF00B76B68 /* AppKit.framework in Frameworks */,
+				3FA1689719347F1D0024A252 /* libogg.a in Frameworks */,
 				3F11303F192B46D400B76B68 /* CoreData.framework in Frameworks */,
 				3F01C7B4192B421900F043A3 /* IOKit.framework in Frameworks */,
 				3F01C7B0192B41BA00F043A3 /* OpenGL.framework in Frameworks */,
 				3F01C7AE192B41A000F043A3 /* ApplicationServices.framework in Frameworks */,
 				3F01C7AC192B417C00F043A3 /* CoreFoundation.framework in Frameworks */,
 				3F01C7AA192B40F600F043A3 /* liballegro-static.a in Frameworks */,
+				3FA1689819347F1D0024A252 /* libvorbis.a in Frameworks */,
 				3F01C79F192B40F600F043A3 /* liballegro_acodec-static.a in Frameworks */,
 				3F01C7A5192B40F600F043A3 /* liballegro_main-static.a in Frameworks */,
 				3F01C7A6192B40F600F043A3 /* liballegro_memfile-static.a in Frameworks */,
@@ -103,6 +126,7 @@
 				3F01C7A9192B40F600F043A3 /* liballegro_ttf-static.a in Frameworks */,
 				3F01C7B2192B41E600F043A3 /* libfreetype.a in Frameworks */,
 				3F01C7A1192B40F600F043A3 /* liballegro_color-static.a in Frameworks */,
+				3FA1689919347F1D0024A252 /* libvorbisenc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +142,9 @@
 				3F01C76E19202DED00F043A3 /* RocketOff.png */,
 				3F01C76F19202DED00F043A3 /* RocketOn.png */,
 				3F01C7761929F54900F043A3 /* turret.png */,
+				3FA1689F19347FDD0024A252 /* explosion.wav */,
+				3FA168A019347FDD0024A252 /* laser.wav */,
+				3FA168A51934A6300024A252 /* Afterburner.ogg */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -142,6 +169,8 @@
 		3FE61D24191A1D53001DED8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3FA1689D19347F6E0024A252 /* OpenAL.framework */,
+				3FA1689B19347F550024A252 /* AudioToolbox.framework */,
 				3FE61D28191A1D53001DED8B /* AppKit.framework */,
 				3F01C7AD192B41A000F043A3 /* ApplicationServices.framework */,
 				3FE61D25191A1D53001DED8B /* Cocoa.framework */,
@@ -162,6 +191,10 @@
 				3F01C79C192B40F600F043A3 /* liballegro_primitives-static.a */,
 				3F01C79D192B40F600F043A3 /* liballegro_ttf-static.a */,
 				3F01C7B1192B41E600F043A3 /* libfreetype.a */,
+				3FA1689319347F1D0024A252 /* libogg.a */,
+				3FA1689419347F1D0024A252 /* libvorbis.a */,
+				3FA1689519347F1D0024A252 /* libvorbisenc.a */,
+				3FA1689619347F1D0024A252 /* libvorbisfile.a */,
 				3F01C7AF192B41BA00F043A3 /* OpenGL.framework */,
 			);
 			name = Frameworks;
@@ -247,9 +280,12 @@
 			files = (
 				3F01C7731925709200F043A3 /* shield.png in Resources */,
 				3F01C77119202DED00F043A3 /* RocketOn.png in Resources */,
+				3FA168A119347FDD0024A252 /* explosion.wav in Resources */,
 				3F001FCE191C47F000510AF5 /* Menlo.ttf in Resources */,
 				3F01C7771929F54900F043A3 /* turret.png in Resources */,
+				3FA168A61934A6310024A252 /* Afterburner.ogg in Resources */,
 				3F01C77519257B9F00F043A3 /* lazer.png in Resources */,
+				3FA168A219347FDD0024A252 /* laser.wav in Resources */,
 				3F01C77019202DED00F043A3 /* RocketOff.png in Resources */,
 				3F001FB8191C475600510AF5 /* star.png in Resources */,
 				3FE61D3E191A1D53001DED8B /* Images.xcassets in Resources */,

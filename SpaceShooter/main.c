@@ -4,13 +4,16 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+#include <stdlib.h>
 
 #include "gameobjects.h"
 
-#define APPNAME "Allegro Templete"
-#define DESIGNSIZE {1680, 1050}
+#define APPNAME "Space Shooter"
+#define DESIGNSIZE {1280, 800}
 #define USEMOUSE false
-#define SHOWSTATS true
+#define SHOWSTATS false
 
 const float FPS = 60;
 
@@ -19,11 +22,6 @@ float getAspectRatio(struct Size size) {
 }
 
 int main(int argc, char **argv) {
-    ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-    ALLEGRO_DISPLAY *display = NULL;
-    ALLEGRO_TIMER *timer = NULL;
-    ALLEGRO_FONT *fpsfont;
-    ALLEGRO_MONITOR_INFO monitor;
 	struct Size designSize = DESIGNSIZE;
 	struct Size winSize;
     bool run = true;
@@ -34,6 +32,7 @@ int main(int argc, char **argv) {
 	ALLEGRO_TRANSFORM trans;
 	ALLEGRO_COLOR color_black = al_map_rgb_f(0, 0, 0);
     ALLEGRO_COLOR color_white = al_map_rgb_f(1, 1, 1);
+    ALLEGRO_COLOR color_green = al_map_rgb_f(0, 1, 0);
     
     if (!al_init()) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize allegro", "OK", ALLEGRO_MESSAGEBOX_ERROR);
@@ -74,20 +73,24 @@ int main(int argc, char **argv) {
         return -1;
     }
     
-    event_queue = al_create_event_queue();
-    if (!event_queue) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to create event_queue", "OK", ALLEGRO_MESSAGEBOX_ERROR);
-        al_destroy_display(display);
+    if (!al_install_audio()) {
+        al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize sound", "OK", ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
     }
     
+    if (!al_init_acodec_addon()) {
+        al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize sound", "OK", ALLEGRO_MESSAGEBOX_ERROR);
+        return -1;
+    }
+    
+    ALLEGRO_MONITOR_INFO monitor;
     al_get_monitor_info(0, &monitor);
 	winSize.width = (float)(monitor.x2 - monitor.x1);
 	winSize.height = (float)(monitor.y2 - monitor.x1);
     
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
-    display = al_create_display(designSize.width, designSize.height);
+    ALLEGRO_DISPLAY *display = al_create_display(designSize.width, designSize.height);
     if (!display) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to create display", "OK", ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
@@ -102,14 +105,27 @@ int main(int argc, char **argv) {
     al_scale_transform(&trans, sx, sy);
     al_use_transform(&trans);
     
-    timer = al_create_timer(1.0 / FPS);
+    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+    if (!event_queue) {
+        al_show_native_message_box(NULL, "Error", "Error", "Failed to create event_queue", "OK", ALLEGRO_MESSAGEBOX_ERROR);
+        al_destroy_display(display);
+        return -1;
+    }
+    
+    ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
     if (!timer) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to create game timer", "OK", ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
     }
     
-    fpsfont = al_load_ttf_font("Menlo.ttf", 18, 0);
+    ALLEGRO_FONT *fpsfont = al_load_ttf_font("Menlo.ttf", 18, 0);
     if (!fpsfont) {
+        al_show_native_message_box(NULL, "Error", "Error", "Failed to load required font", "OK", ALLEGRO_MESSAGEBOX_ERROR);
+        return -1;
+    }
+    
+    ALLEGRO_FONT *displayFont = al_load_ttf_font("Menlo.ttf", 40, 0);
+    if (!displayFont) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to load required font", "OK", ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
     }
@@ -124,6 +140,10 @@ int main(int argc, char **argv) {
     srand((unsigned int)time(0));
     
     if (!loadImages()) {
+        return -1;
+    }
+    
+    if (!loadSounds()) {
         return -1;
     }
     
@@ -146,6 +166,9 @@ int main(int argc, char **argv) {
                 if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                     run = false;
                 }
+                else if (ev.keyboard.keycode == ALLEGRO_KEY_T) {
+                    showTextures = !showTextures;
+                }
                 break;
                 
             case ALLEGRO_EVENT_TIMER:
@@ -153,6 +176,18 @@ int main(int argc, char **argv) {
                 
                 moveObjects();
                 renderObjects();
+                
+                if (gameOver) {
+                    al_draw_filled_rounded_rectangle((designSize.width / 2) - 125, (designSize.height / 2) - 50, (designSize.width / 2) + 125, (designSize.height / 2) + 50, 10, 10, color_black);
+                    al_draw_rounded_rectangle((designSize.width / 2) - 125, (designSize.height / 2) - 50, (designSize.width / 2) + 125, (designSize.height / 2) + 50, 10, 10, color_white, 2);
+                    al_draw_textf(displayFont, color_green, designSize.width / 2, (designSize.height / 2) - 50, ALLEGRO_ALIGN_CENTER, "GAME OVER");
+                    if (win) {
+                        al_draw_textf(displayFont, color_green, designSize.width / 2, (designSize.height / 2), ALLEGRO_ALIGN_CENTER, "You Win!");
+                    }
+                    else {
+                        al_draw_textf(displayFont, color_green, designSize.width / 2, (designSize.height / 2), ALLEGRO_ALIGN_CENTER, "You Loose!");
+                    }
+                }
                 
                 if (SHOWSTATS) {
                     al_draw_textf(fpsfont, color_white, designSize.width, 0, ALLEGRO_ALIGN_RIGHT, "FPS: %02d", fps);
@@ -179,8 +214,12 @@ int main(int argc, char **argv) {
         }
     }
     unloadImages();
+    unloadSounds();
     al_destroy_timer(timer);
+    al_set_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, false);
     al_destroy_display(display);
+    al_destroy_font(fpsfont);
+    al_destroy_font(displayFont);
     al_destroy_event_queue(event_queue);
     return 0;
 }

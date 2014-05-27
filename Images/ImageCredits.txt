@@ -1,0 +1,8 @@
+- Rocket: http://opengameart.org/content/rocket
+      Modified non-thruster image to be same size as thruster image
+- Turret: http://opengameart.org/content/set-faction9-spacestations
+      Modified image by making smaller and running a cartoon filter over it to smooth out lines
+- Lazer : http://opengameart.org/content/lasers-and-beams
+      Only used largest red beam
+- Star  : Self-made in the GIMP
+- Shield: Self-made in the GIMP
