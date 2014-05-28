@@ -22,7 +22,7 @@ float getAspectRatio(struct Size size) {
 }
 
 int main(int argc, char **argv) {
-	struct Size designSize = DESIGNSIZE;
+//	struct Size designSize = DESIGNSIZE;
 	struct Size winSize;
     bool run = true;
     int fps = 0, fps_accum = 0;
@@ -90,7 +90,8 @@ int main(int argc, char **argv) {
     
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
     al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
-    ALLEGRO_DISPLAY *display = al_create_display(designSize.width, designSize.height);
+//    ALLEGRO_DISPLAY *display = al_create_display(designSize.width, designSize.height);
+    ALLEGRO_DISPLAY *display = al_create_display(winSize.width, winSize.height);
     if (!display) {
         al_show_native_message_box(NULL, "Error", "Error", "Failed to create display", "OK", ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
@@ -99,11 +100,11 @@ int main(int argc, char **argv) {
     if (!USEMOUSE) {
         al_hide_mouse_cursor(display);
     }
-    sx = winSize.width / designSize.width;
-    sy = winSize.height / designSize.height;
-    al_identity_transform(&trans);
-    al_scale_transform(&trans, sx, sy);
-    al_use_transform(&trans);
+//    sx = winSize.width / designSize.width;
+//    sy = winSize.height / designSize.height;
+//    al_identity_transform(&trans);
+//    al_scale_transform(&trans, sx, sy);
+//    al_use_transform(&trans);
     
     ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
     if (!event_queue) {
@@ -147,7 +148,7 @@ int main(int argc, char **argv) {
         return -1;
     }
     
-    buildMap(designSize);
+    buildMap(winSize);
     
     al_start_timer(timer);
     
@@ -169,6 +170,9 @@ int main(int argc, char **argv) {
                 else if (ev.keyboard.keycode == ALLEGRO_KEY_T) {
                     showTextures = !showTextures;
                 }
+                else if (ev.keyboard.keycode == ALLEGRO_KEY_S) {
+                    toggleSound();
+                }
                 break;
                 
             case ALLEGRO_EVENT_TIMER:
@@ -178,26 +182,26 @@ int main(int argc, char **argv) {
                 renderObjects();
                 
                 if (gameOver) {
-                    al_draw_filled_rounded_rectangle((designSize.width / 2) - 125, (designSize.height / 2) - 50, (designSize.width / 2) + 125, (designSize.height / 2) + 50, 10, 10, color_black);
-                    al_draw_rounded_rectangle((designSize.width / 2) - 125, (designSize.height / 2) - 50, (designSize.width / 2) + 125, (designSize.height / 2) + 50, 10, 10, color_white, 2);
-                    al_draw_textf(displayFont, color_green, designSize.width / 2, (designSize.height / 2) - 50, ALLEGRO_ALIGN_CENTER, "GAME OVER");
+                    al_draw_filled_rounded_rectangle((winSize.width / 2) - 125, (winSize.height / 2) - 50, (winSize.width / 2) + 125, (winSize.height / 2) + 50, 10, 10, color_black);
+                    al_draw_rounded_rectangle((winSize.width / 2) - 125, (winSize.height / 2) - 50, (winSize.width / 2) + 125, (winSize.height / 2) + 50, 10, 10, color_white, 2);
+                    al_draw_textf(displayFont, color_green, winSize.width / 2, (winSize.height / 2) - 50, ALLEGRO_ALIGN_CENTER, "GAME OVER");
                     if (win) {
-                        al_draw_textf(displayFont, color_green, designSize.width / 2, (designSize.height / 2), ALLEGRO_ALIGN_CENTER, "You Win!");
+                        al_draw_textf(displayFont, color_green, winSize.width / 2, (winSize.height / 2), ALLEGRO_ALIGN_CENTER, "You Win!");
                     }
                     else {
-                        al_draw_textf(displayFont, color_green, designSize.width / 2, (designSize.height / 2), ALLEGRO_ALIGN_CENTER, "You Loose!");
+                        al_draw_textf(displayFont, color_green, winSize.width / 2, (winSize.height / 2), ALLEGRO_ALIGN_CENTER, "You Loose!");
                     }
                 }
                 
                 if (SHOWSTATS) {
-                    al_draw_textf(fpsfont, color_white, designSize.width, 0, ALLEGRO_ALIGN_RIGHT, "FPS: %02d", fps);
-                    al_draw_textf(fpsfont, color_white, designSize.width, 20, ALLEGRO_ALIGN_RIGHT, "R: %0.2f", player.rotation);
-                    al_draw_textf(fpsfont, color_white, designSize.width, 40, ALLEGRO_ALIGN_RIGHT, "AX: %06.2f", player.accel.x);
-                    al_draw_textf(fpsfont, color_white, designSize.width, 60, ALLEGRO_ALIGN_RIGHT, "AY: %06.2f", player.accel.y);
-                    al_draw_textf(fpsfont, color_white, designSize.width, 80, ALLEGRO_ALIGN_RIGHT, "X: %04.0f/%04d", player.pos.x, MAP_MAX);
-                    al_draw_textf(fpsfont, color_white, designSize.width, 100, ALLEGRO_ALIGN_RIGHT, "Y: %04.0f/%04d", player.pos.y, MAP_MAX);
-                    al_draw_textf(fpsfont, color_white, designSize.width, 120, ALLEGRO_ALIGN_RIGHT, "Shield: %0.4f", player.shield);
-                    al_draw_textf(fpsfont, color_white, designSize.width, 140, ALLEGRO_ALIGN_RIGHT, "Shot: %0.4f", player.shotCooldown);
+                    al_draw_textf(fpsfont, color_white, winSize.width, 0, ALLEGRO_ALIGN_RIGHT, "FPS: %02d", fps);
+                    al_draw_textf(fpsfont, color_white, winSize.width, 20, ALLEGRO_ALIGN_RIGHT, "R: %0.2f", player.rotation);
+                    al_draw_textf(fpsfont, color_white, winSize.width, 40, ALLEGRO_ALIGN_RIGHT, "AX: %06.2f", player.accel.x);
+                    al_draw_textf(fpsfont, color_white, winSize.width, 60, ALLEGRO_ALIGN_RIGHT, "AY: %06.2f", player.accel.y);
+                    al_draw_textf(fpsfont, color_white, winSize.width, 80, ALLEGRO_ALIGN_RIGHT, "X: %04.0f/%04d", player.pos.x, MAP_MAX);
+                    al_draw_textf(fpsfont, color_white, winSize.width, 100, ALLEGRO_ALIGN_RIGHT, "Y: %04.0f/%04d", player.pos.y, MAP_MAX);
+                    al_draw_textf(fpsfont, color_white, winSize.width, 120, ALLEGRO_ALIGN_RIGHT, "Shield: %0.4f", player.shield);
+                    al_draw_textf(fpsfont, color_white, winSize.width, 140, ALLEGRO_ALIGN_RIGHT, "Shot: %0.4f", player.shotCooldown);
                 }
                 al_wait_for_vsync();
                 al_flip_display();
@@ -215,6 +219,9 @@ int main(int argc, char **argv) {
     }
     unloadImages();
     unloadSounds();
+    if (!USEMOUSE) {
+        al_show_mouse_cursor(display);
+    }
     al_destroy_timer(timer);
     al_set_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, false);
     al_destroy_display(display);

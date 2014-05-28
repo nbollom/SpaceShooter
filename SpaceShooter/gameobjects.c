@@ -24,7 +24,7 @@
 #define LAZER_DAMAGE 0.1
 
 ALLEGRO_BITMAP *starImage = NULL;
-ALLEGRO_COLOR colors[4] = {{1,1,1,1},{1,0.2,0.2,1},{0.2,1,0.2,1},{0.2,0.2,1,1}};
+ALLEGRO_COLOR colors[4] = {{1,1,1,1},{0.6,0.2,0.2,1},{0.2,1,0.2,1},{0.2,0.2,1,1}};
 ALLEGRO_BITMAP *shipImages[2] = {NULL};
 ALLEGRO_BITMAP *shieldImage = NULL;
 ALLEGRO_BITMAP *lazerImage = NULL;
@@ -42,6 +42,7 @@ struct Point camera = {0,0};
 struct Lazer lazers[MAX_LAZERS];
 int lazerCount;
 bool showTextures = true;
+bool playSounds = true;
 bool gameOver = false;
 bool win = false;
 
@@ -54,6 +55,16 @@ struct Point lastCollisionPath[95] = {{0,0}};
 
 static float r(float max) {
     return (float)(rand() / ((float)RAND_MAX / max));
+}
+
+void toggleSound(void) {
+    playSounds = !playSounds;
+    if (playSounds) {
+        al_play_sample(bgMusic, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+    }
+    else {
+        al_stop_samples();
+    }
 }
 
 static bool loadImage(char name[50], ALLEGRO_BITMAP **img) {
@@ -195,7 +206,9 @@ void buildMap(struct Size winSize) {
         turrets[i].shotCooldown = TURRET_SHOT_RATE;
         turrets[i].dead = false;
     }
-    al_play_sample(bgMusic, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_LOOP,NULL);
+    if (playSounds) {
+        al_play_sample(bgMusic, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+    }
 }
 
 void removeLazers(int count, int indexes[]) {
@@ -251,7 +264,9 @@ void updateTurrets() {
                     lazers[lazerCount] = lazer;
                     lazerCount++;
                     turrets[i].shotCooldown = TURRET_SHOT_RATE;
-                    al_play_sample(lazerSound, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                    if (playSounds) {
+                        al_play_sample(lazerSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                    }
                 }
             }
             else {
@@ -302,7 +317,9 @@ void checkCollisions() {
                     for (int k = 0; k < 4; k++) {
                         if (pointInPath(lazerPath[k], lastCollisionPath, 95)) {
                             turrets[j].dead = true;
-                            al_play_sample(explosionSound, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                            if (playSounds) {
+                                al_play_sample(explosionSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                            }
                             removeIndexes[removeCount] = i;
                             removeCount++;
                             break;
@@ -359,7 +376,9 @@ void checkCollisions() {
                             player.shield -= LAZER_DAMAGE * 1.5;
                             player.shieldRecharge = 0;
                             turrets[i].dead = true;
-                            al_play_sample(explosionSound, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                            if (playSounds) {
+                                al_play_sample(explosionSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                            }
                             break;
                         }
                     }
@@ -373,7 +392,9 @@ void checkCollisions() {
                             player.shieldRecharge = 0;
                             player.health -= LAZER_DAMAGE * 1.5;
                             turrets[i].dead = true;
-                            al_play_sample(explosionSound, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                            if (playSounds) {
+                                al_play_sample(explosionSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                            }
                             break;
                         }
                     }
@@ -385,7 +406,9 @@ void checkCollisions() {
         removeLazers(removeCount, removeIndexes);
     }
     if (player.health < 0) {
-        al_play_sample(explosionSound, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+        if (playSounds) {
+            al_play_sample(explosionSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+        }
         gameOver = true;
     }
     if (allTurretsDead) {
@@ -465,16 +488,20 @@ void moveObjects(void) {
     if (al_key_down(&keyState, ALLEGRO_KEY_SPACE) && player.shotCooldown <= 0 && lazerCount < MAX_LAZERS) {
         player.shotCooldown = PLAYER_SHOT_RATE;
         struct Lazer lazer;
-        lazer.rotation = player.rotation + (r(0.2) - 0.1);
+        lazer.rotation = player.rotation + (r(0.06) - 0.03);
         lazer.start.x = lazer.pos.x = player.pos.x + (sin(lazer.rotation) * 100);
         lazer.start.y = lazer.pos.y = player.pos.y + (-cos(lazer.rotation) * 100);
-        lazer.accel.x = (sin(lazer.rotation) * LAZER_FORCE);
-        lazer.accel.y = (-cos(lazer.rotation) * LAZER_FORCE);
+        float shipXAngleForce = sin(player.rotation) * player.accel.x;
+        float shipYAngleForce = -cos(player.rotation) * player.accel.y;
+        lazer.accel.x = (sin(lazer.rotation) * (LAZER_FORCE + shipXAngleForce));
+        lazer.accel.y = (-cos(lazer.rotation) * (LAZER_FORCE + shipYAngleForce));
         lazer.distance = 0;
         lazer.players = true;
         lazers[lazerCount] = lazer;
         lazerCount++;
-        al_play_sample(lazerSound, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+        if (playSounds) {
+            al_play_sample(lazerSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+        }
     }
 }
 
@@ -516,7 +543,7 @@ void renderObjects(void) {
                     c2 = (a2 * beg.x) + (b2 * beg.y);
                     double x = ((b2 * c1) - (b1 * c2)) / ((a1 * b2) - (a2 * b1));
                     if (x >= beg.x && x <= end.x) {
-                        al_draw_filled_circle(x - beg.x, beg.y - beg.y, 2, al_map_rgb_f(1, 1, 0));
+                        al_draw_filled_circle(x - beg.x, beg.y - beg.y, 3, al_map_rgb_f(1, 0, 0));
                     }
                 }
                 else {
@@ -525,7 +552,7 @@ void renderObjects(void) {
                     c2 = (a2 * beg.x) + (b2 * end.y);
                     double x = ((b2 * c1) - (b1 * c2)) / ((a1 * b2) - (a2 * b1));
                     if (x >= beg.x && x <= end.x) {
-                        al_draw_filled_circle(x - beg.x, end.y - beg.y, 2, al_map_rgb_f(1, 1, 0));
+                        al_draw_filled_circle(x - beg.x, end.y - beg.y, 3, al_map_rgb_f(1, 0, 0));
                     }
                 }
                 if (turrets[i].pos.x < camera.x) {
@@ -534,7 +561,7 @@ void renderObjects(void) {
                     c2 = (a2 * beg.x) + (b2 * end.y);
                     double y = ((a1 * c2) - (a2 * c1)) / ((a1 * b2) - (a2 * b1));
                     if (y >= beg.y && y <= end.y) {
-                        al_draw_filled_circle(beg.x - beg.x, y - beg.y, 2, al_map_rgb_f(1, 1, 0));
+                        al_draw_filled_circle(beg.x - beg.x, y - beg.y, 3, al_map_rgb_f(1, 0, 0));
                     }
                 }
                 else {
@@ -543,7 +570,7 @@ void renderObjects(void) {
                     c2 = (a2 * end.x) + (b2 * end.y);
                     double y = ((a1 * c2) - (a2 * c1)) / ((a1 * b2) - (a2 * b1));
                     if (y >= beg.y && y <= end.y) {
-                        al_draw_filled_circle(end.x - beg.x, y - beg.y, 2, al_map_rgb_f(1, 1, 0));
+                        al_draw_filled_circle(end.x - beg.x, y - beg.y, 3, al_map_rgb_f(1, 0, 0));
                     }
                 }
             }

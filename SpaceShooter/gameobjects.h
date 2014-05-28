@@ -96,6 +96,7 @@ extern bool showTextures;
 extern bool gameOver;
 extern bool win;
 
+void toggleSound(void);
 bool loadImages(void);
 bool loadSounds(void);
 void unloadImages(void);
